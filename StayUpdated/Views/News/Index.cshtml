@@ -1,0 +1,58 @@
+﻿@model StayUpdated.Models.NewsViewModel
+
+
+<div class="col-sm-3">
+	@using (Html.BeginForm("Sources", "News", FormMethod.Post)) {
+		<h4>Available Feeds</h4>
+		<div style="max-height:600px; overflow: auto;">
+			@for (int i = 0; i < Model.Sources.Count; i++) {
+				<div class="checkbox">
+					<label>
+						@Html.HiddenFor(m => m.Sources[i].Id)
+						@Html.CheckBoxFor(m => m.Sources[i].IsSelected)
+						@Model.Sources[i].Name
+					</label>
+				</div>
+			}
+		</div>
+
+		<input type="submit" name="submit" value="Apply filter" class="btn btn-primary" />
+	}
+
+</div>
+<div class="col-sm-offset-1 col-sm-8">
+	<div class="row">
+		<nav>
+			<ul class="pager">
+				<li>@Html.ActionLink("News", "Index", "News")</li>
+				<li>@Html.ActionLink("Sources", "Index", "Sources")</li>
+				<li title="Feature not enabled"><a href="">Saved <span class="badge">4</span></a></li>
+			</ul>
+		</nav>
+		<div style="width: 40%; display: flex; margin: 0 auto;">
+			@using (Html.BeginForm("Index", "News", FormMethod.Get, new { style = "display:flex;" })) {
+				@Html.TextBox("query", null, new { @class = "form-control" })
+				<input type="submit" name="submit" value="Search" class="btn btn-default" />
+			}
+		</div>
+		<span>News found: @Model.Total</span>
+	</div>
+	<div class="row" style="margin-top: 50px;">
+		@foreach (var article in Model.Articles) {
+			<div class="col-sm-6">
+				<div class="thumbnail" style="height: 500px;">
+					<img src="@article.UrlToImage" alt="Image for @article.Title">
+					<div class="caption">
+						<h3>@article.Title</h3>
+						<p>@article.Description</p>
+						<p>
+							<a href="#" class="btn btn-primary" role="button">Read</a>
+							<a href="#" class="btn btn-link" role="button" title="Feature not enabled">Save for later</a>
+						</p>
+					</div>
+				</div>
+			</div>
+		}
+	</div>
+</div>
+
